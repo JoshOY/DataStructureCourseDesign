@@ -24,11 +24,27 @@ public:
 
 	static void destroyInstance();
 
+	void run();                        
+
+	
+
 private:
 
 	static System* sharedSystem;
 
 	list<Student> studentsList;
+
+	int inputCommand();
+
+	bool insert();
+
+	bool remove();
+
+	bool find();
+
+	bool change();
+
+	bool statistics();
 };
 
 #endif

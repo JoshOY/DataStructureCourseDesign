@@ -21,5 +21,8 @@
 using namespace std;
 
 const regex ID_PATTERN("[0-9]+");
+const regex INPUT_PATTERN("[12345]");
+const regex GENDER_PATTERN("[MFmf]");
+const regex AGE_PATTERN("[1-9](([0-9])*)");
 
 #endif

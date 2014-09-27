@@ -9,8 +9,7 @@
 
 int main(int argc, char* argv[]) 
 {
-	// ...TODO
-
+	System::getInstance()->run();
 	System::destroyInstance();
 	return 0;
 }
