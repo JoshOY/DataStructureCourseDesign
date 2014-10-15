@@ -32,7 +32,7 @@ private:
 
 	static System* sharedSystem;
 
-	list<Student> studentsList;
+	vector<Student> studentsList;
 
 	int inputCommand();
 

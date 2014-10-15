@@ -47,6 +47,16 @@ public:
 
 	bool setApplyFor(const string& _applyFor);
 
+	/* Override < operation */
+	int operator<(const Student& _comparing) {
+		if (this->id < _comparing.id) {
+			return 1;
+		}
+		else {
+			return 0;
+		}
+	}
+
 private:
 
 	long long id;

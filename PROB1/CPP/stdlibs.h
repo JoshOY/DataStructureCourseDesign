@@ -13,10 +13,10 @@
 #include <iostream>
 #include <fstream>
 #include <vector>
-#include <list>
 #include <string>
 #include <sstream>
 #include <regex>	// C++11
+#include <map>
 
 using namespace std;
 
