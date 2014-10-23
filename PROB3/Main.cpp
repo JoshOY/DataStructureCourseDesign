@@ -7,6 +7,7 @@
 using namespace std;
 
 static ifstream fin("prob3.txt");
+static ofstream fout("prob3out.txt");
 static int maze_length, maze_width;
 static int startPosX, startPosY, endPosX, endPosY;
 static vector<vector<bool> > maze;
