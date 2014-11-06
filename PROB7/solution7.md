@@ -37,9 +37,9 @@
 所以，只有最外层的运算符有效。
 
 如果表达式整个被括号包起来了怎么办？把两端的括号消掉！
-<code>while (expression[0] == '(' && expression[expression.length() - 1] == ')') {
-  expression = expression.substr(1, expression.length() - 2);
-}</code>
+<code>while (expression[0] == '(' && expression[expression.length() - 1] == ')') {<br>
+  expression = expression.substr(1, expression.length() - 2);<br>
+}<br></code>
 
 
 ###获得波兰表达式和逆波兰表达式
