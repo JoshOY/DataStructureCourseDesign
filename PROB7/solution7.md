@@ -36,11 +36,14 @@
 所以，不嫌麻烦的话，就建立一个与串等长的布尔数组，标记一下哪些子串是在括号中的，那么我们检索运算符时，凡是括号中的运算符是不考虑的。
 所以，只有最外层的运算符有效。
 
-如果表达式整个被括号包起来了怎么办？把两端的括号消掉！
-<code><br>
-while (expression[0] == '(' && expression[expression.length() - 1] == ')') {<br>
-  expression = expression.substr(1, expression.length() - 2);<br>
-}<br>
+<del>如果表达式整个被括号包起来了怎么办？把两端的括号消掉！</del>
+好吧，当我没说上面那句话，看来还是得把整个串遍历一遍确定是否最外层有运算符……
+例如：(1+2)/(3+4)用上面的方法就会变成：1+2)/(3+4，错误。
+
+<code>
+while (expression[0] == '(' && expression[expression.length() - 1] == ')') {
+  expression = expression.substr(1, expression.length() - 2);
+}
 </code>
 
 
