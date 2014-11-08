@@ -47,7 +47,8 @@ int main(int argc, char* argv[])
 	string filename;
 	cin >> filename;
 
-	fstream fout(filename);
+	fstream fout;
+	fout.open(filename, ios::trunc|ios::out);
 	fout << "文本内容如下：" << endl;
 	fout << content << endl;
 	fout << "----------------------------------" << endl;
