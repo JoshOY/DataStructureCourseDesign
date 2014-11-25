@@ -29,6 +29,7 @@
 由于需求上没说删除（外加红黑树的删除节点实在太BT，情况多到爆），所以完成了搜索、插入功能。
 
 首先从节点开始：
+
 	template <class T>
 	struct RBTNode {
 		RBTNode(RBTNode* _pNode)
@@ -47,7 +48,6 @@
 			this->right = nullptr;
 			this->key = _key;
 		}
-	
 		T key;
 		RBColor color;
 		RBTNode *parent;
@@ -123,6 +123,7 @@ nil节点是一个“空节点”，但它和nullptr不同，他虽然“空”�
 注意倒数第二行的insertFixup(z);
 这是唯一一句和一般搜索树插入不同的地方。
 也就是说，好戏来了：
+
 	void insertFixup(RBTNode<T>* z) {
 		while (z->parent->color == RBT_RED) {
 			if (z->parent == z->parent->parent->left) {
