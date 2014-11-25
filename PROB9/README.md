@@ -29,33 +29,32 @@
 由于需求上没说删除（外加红黑树的删除节点实在太BT，情况多到爆），所以完成了搜索、插入功能。
 
 首先从节点开始：
-'''
-template <class T>
-struct RBTNode {
-	RBTNode(RBTNode* _pNode)
-	{
-		this->color = RBT_RED;
-		this->parent = _pNode;
-		this->left = nullptr;
-		this->right = nullptr;
-	}
+	template <class T>
+	struct RBTNode {
+		RBTNode(RBTNode* _pNode)
+		{
+			this->color = RBT_RED;
+			this->parent = _pNode;
+			this->left = nullptr;
+			this->right = nullptr;
+		}
+	
+		RBTNode(RBTNode* _pNode, const T& _key)
+		{
+			this->color = RBT_RED;
+			this->parent = _pNode;
+			this->left = nullptr;
+			this->right = nullptr;
+			this->key = _key;
+		}
+	
+		T key;
+		RBColor color;
+		RBTNode *parent;
+		RBTNode *left;
+		RBTNode *right;
+	};
 
-	RBTNode(RBTNode* _pNode, const T& _key)
-	{
-		this->color = RBT_RED;
-		this->parent = _pNode;
-		this->left = nullptr;
-		this->right = nullptr;
-		this->key = _key;
-	}
-
-	T key;
-	RBColor color;
-	RBTNode *parent;
-	RBTNode *left;
-	RBTNode *right;
-};
-'''
 这个不多说。请参照红黑树节点的基本定义。其中，RBColor是一个布尔值(typedef bool RBColor;)，默认生成的新节点为红色。
 
 注意，要自己生成一个nil节点！
@@ -64,8 +63,8 @@ nil节点是一个“空节点”，但它和nullptr不同，他虽然“空”�
 然后是树，由于太长了请直接看RedBlackTree.h中的class RBTree，代码就不放了。
 
 其中要提一下的是树的左旋和右旋，这里只给出左旋的代码，注意交换节点的顺序，别弄错了：
-'''
-void leftRotate(RBTNode<T> *x)
+
+	void leftRotate(RBTNode<T> *x)
 	{
 		RBTNode<T> *y = x->right;	// y为x的右节点
 		x->right = y->left;
@@ -81,7 +80,7 @@ void leftRotate(RBTNode<T> *x)
 		y->left = x;
 		x->parent = y;
 	}
-'''
+
 
 右旋“同理可得”。具体的细节可以参看《算法导论》第十三章，旋转会改变树的节点位置关系，但偏序关系不发生改变。
 也就是说，通过旋转，我们可以降低树的高度但不改变树中的节点之间的偏序关系（即“大小”关系）。
@@ -89,93 +88,90 @@ void leftRotate(RBTNode<T> *x)
 插入：
 插入新节点时，新节点是红色的。
 我们先按照一般二叉树的方式进行插入：
-'''
-void insert(const T& value)
-{
-	RBTNode<T> *y = this->nil;
-	RBTNode<T> *x = this->root;
-	RBTNode<T> *z = nullptr;
 
-	while (x != this->nil) {
-		y = x;
-		if (value < x->key)
-			x = x->left;
-		else
-			x = x->right;
-	}
-
-	z = new RBTNode<T>(y, value);
-
-	if (y == this->nil)
-		this->root = z;
-	else if (value < y->key)
-		y->left = z;
-	else
-		y->right = z;
-
-	z->left = this->nil;
-	z->right = this->nil;
-	z->color = RBT_RED;
+	void insert(const T& value)
+	{
+		RBTNode<T> *y = this->nil;
+		RBTNode<T> *x = this->root;
+		RBTNode<T> *z = nullptr;
 	
-	insertFixup(z);
-	return;
-}
-'''
+		while (x != this->nil) {
+			y = x;
+			if (value < x->key)
+				x = x->left;
+			else
+				x = x->right;
+		}
+	
+		z = new RBTNode<T>(y, value);
+	
+		if (y == this->nil)
+			this->root = z;
+		else if (value < y->key)
+			y->left = z;
+		else
+			y->right = z;
+	
+		z->left = this->nil;
+		z->right = this->nil;
+		z->color = RBT_RED;
+		
+		insertFixup(z);
+		return;
+	}
 
 注意倒数第二行的insertFixup(z);
 这是唯一一句和一般搜索树插入不同的地方。
 也就是说，好戏来了：
-'''C++
-void insertFixup(RBTNode<T>* z) {
-	while (z->parent->color == RBT_RED) {
-		if (z->parent == z->parent->parent->left) {
-			RBTNode<T>* y = z->parent->parent->right;
-			/* Case 1 */
-			if (y->color == RBT_RED) {
+	void insertFixup(RBTNode<T>* z) {
+		while (z->parent->color == RBT_RED) {
+			if (z->parent == z->parent->parent->left) {
+				RBTNode<T>* y = z->parent->parent->right;
+				/* Case 1 */
+				if (y->color == RBT_RED) {
+					z->parent->color = RBT_BLACK;
+					y->color = RBT_BLACK;
+					z->parent->parent->color = RBT_RED;
+					z = z->parent->parent;
+					continue;
+				}
+				/* Case 2 */
+				else if (z == z->parent->right) {
+					z = z->parent;
+					leftRotate(z);	/* Then it turns into case 3 */
+				}
+				/* Case 3 */
 				z->parent->color = RBT_BLACK;
-				y->color = RBT_BLACK;
-				z->parent->parent->color = RBT_RED;
-				z = z->parent->parent;
-				continue;
+				if (z->parent->parent != nullptr) {
+					z->parent->parent->color = RBT_RED;
+					rightRotate(z->parent->parent);
+				}
 			}
-			/* Case 2 */
-			else if (z == z->parent->right) {
-				z = z->parent;
-				leftRotate(z);	/* Then it turns into case 3 */
-			}
-			/* Case 3 */
-			z->parent->color = RBT_BLACK;
-			if (z->parent->parent != nullptr) {
-				z->parent->parent->color = RBT_RED;
-				rightRotate(z->parent->parent);
-			}
-		}
-		else if (z->parent == z->parent->parent->right) {
-			RBTNode<T>* y = z->parent->parent->left;
-			/* Case 1 */
-			if (y->color == RBT_RED) {
+			else if (z->parent == z->parent->parent->right) {
+				RBTNode<T>* y = z->parent->parent->left;
+				/* Case 1 */
+				if (y->color == RBT_RED) {
+					z->parent->color = RBT_BLACK;
+					y->color = RBT_BLACK;
+					z->parent->parent->color = RBT_RED;
+					z = z->parent->parent;
+					continue;
+				}
+				/* Case 2 */
+				else if (z == z->parent->left) {
+					z = z->parent;
+					rightRotate(z);	/* Then it turns into case 3 */
+				}
+				/* Case 3 */
 				z->parent->color = RBT_BLACK;
-				y->color = RBT_BLACK;
-				z->parent->parent->color = RBT_RED;
-				z = z->parent->parent;
-				continue;
-			}
-			/* Case 2 */
-			else if (z == z->parent->left) {
-				z = z->parent;
-				rightRotate(z);	/* Then it turns into case 3 */
-			}
-			/* Case 3 */
-			z->parent->color = RBT_BLACK;
-			if (z->parent->parent != nullptr) {
-				z->parent->parent->color = RBT_RED;
-				leftRotate(z->parent->parent);
-			}
-		} /* end if */ 
-	} /* end while */
-	this->root->color = RBT_BLACK;
-}
-'''
+				if (z->parent->parent != nullptr) {
+					z->parent->parent->color = RBT_RED;
+					leftRotate(z->parent->parent);
+				}
+			} /* end if */ 
+		} /* end while */
+		this->root->color = RBT_BLACK;
+	}
 
 其实这是《算法导论》中伪代码的“个人翻译版”，不过原书中的伪代码略带误导性，比如case1之后要continue但伪代码没写，
 还有就是case3的后两步要考虑z为根节点时的特殊情况。
