@@ -1,22 +1,16 @@
-/*
-*	KruskalAlgo.h
-*
-*	Created by 1352847 JoshOY on 14-11-20
-*	Copyright (c) 2014 JoshOY. All rights reserved.
-*/
-
 #ifndef __1352847_KRUSKAL_ALGO_H__
 #define __1352847_KRUSKAL_ALGO_H__
 
 #include <algorithm>
+#include <set>
+#include <map>
 #include <vector>
 #include <string>
 #include <iostream>
+#include <cstdlib>
+#include <sstream>
 
-using std::sort;
-using std::set;
-using std::vector;
-using std::string;
+using namespace std;
 
 const int NOT_FOUND = -1;
 
@@ -38,15 +32,16 @@ typedef struct _Edge {
 // Struct of graph
 typedef struct _Graph {
 	vector<Edge> edges;
-	vector<string> nodes;
+	map<string, int> nodes;
 } Graph;
 
 //Before using this algorithm, please ensure g.edges is sorted.
-void kruskalAlgorithm(const Graph& g)
+vector<string> kruskalAlgorithm(const Graph& g)
 {
 	// Vars we need
 	int n, m;
 	vector<int> parent;
+	vector<string> rtn;
 	auto f = [](const vector<int>& parentVec, int currentNode)
 	{
 		while (parentVec[currentNode] != NOT_FOUND) {
@@ -66,9 +61,29 @@ void kruskalAlgorithm(const Graph& g)
 
 		if (n != m) {	//if m == n, then it's not a tree but a ring
 			parent[n] = m;
-			std::cout << "(" << g.nodes[g.edges[i].node1] << ", " << g.nodes[g.edges[i].node2] << ") [" << g.edges[i].weight << "]" << std::endl;
+			string name1, name2;
+			for (auto v : g.nodes) {
+				if (v.second == g.edges[i].node1) {
+					name1 = v.first;
+					break;
+				}
+			}
+			for (auto v : g.nodes) {
+				if (v.second == g.edges[i].node2) {
+					name2 = v.first;
+					break;
+				}
+			}
+			stringstream ss;
+			string weight_str;
+			ss << g.edges[i].weight;
+			ss >> weight_str;
+
+			rtn.push_back(name1 + "-(" + weight_str + ")->" + name2);
+			//std::cout << "(" << g.nodes[g.edges[i].node1] << ", " << g.nodes[g.edges[i].node2] << ") [" << g.edges[i].weight << "]" << std::endl;
 		}
 	}
+	return rtn;
 }
 
 #endif
