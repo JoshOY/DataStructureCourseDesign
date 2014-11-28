@@ -12,12 +12,12 @@ class Application
 public:
 	Application()
 	{
-		cout << "µçÍøÔì¼ÛÄ£ÄâÏµÍ³" << endl;
+		cout << "ç”µç½‘é€ ä»·æ¨¡æ‹Ÿç³»ç»Ÿ" << endl;
 		cout << endl;
-		cout << "A - ´´ÔìµçÍø½Úµã" << endl;
-		cout << "B - Ìí¼ÓµçÍøµÄ±ß" << endl;
-		cout << "C - ¹¹Ôì²¢ÏÔÊ¾×îÐ¡Éú³ÉÊ÷" << endl;
-		cout << "D - ÍË³ö³ÌÐò" << endl;
+		cout << "A - åˆ›é€ ç”µç½‘èŠ‚ç‚¹" << endl;
+		cout << "B - æ·»åŠ ç”µç½‘çš„è¾¹" << endl;
+		cout << "C - æž„é€ å¹¶æ˜¾ç¤ºæœ€å°ç”Ÿæˆæ ‘" << endl;
+		cout << "D - é€€å‡ºç¨‹åº" << endl;
 	}
 
 	bool getOperation() 
@@ -82,6 +82,7 @@ public:
 
 	void spanTree()
 	{
+		std::sort(g.edges.begin(), g.edges.end());
 		vector<string> t = kruskalAlgorithm(g);
 		for (auto s : t) {
 			cout << s << "\t";
