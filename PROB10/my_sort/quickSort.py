@@ -17,5 +17,5 @@ def quick_sort(sorting_list):
         return left + [pivot] + right
 
 if __name__ == "__main__":
-    sList=[ 13, 14, 94, 33, 82, 25, 59, 94, 65, 23, 45, 27, 73, 25, 39, 10 ]
+    sList = [13, 14, 94, 33, 82, 25, 59, 94, 65, 23, 45, 27, 73, 25, 39, 10]
     print([quick_sort(sList), qsort_step])
