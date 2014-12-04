@@ -5,6 +5,8 @@ import my_sort.insertionSort as insertionSort
 import my_sort.shellSort as shellSort
 import my_sort.quickSort as quickSort
 import my_sort.heapSort as heapSort
+import my_sort.mergeSort as mergeSort
+import my_sort.radixSort as radixSort
 import random
 import datetime
 
@@ -16,7 +18,7 @@ def print_using_time(starttime, endtime):
     if msec < 0:
         msec += 1000
         sec -= 1
-    print "Time used: " + str(sec) + "." + str(msec) + " second(s)."
+    print "Time used: " + str(sec) + "." + (str(msec) if msec >= 100 else '0' + str(msec)) + " second(s)."
 
 #initialize the list
 listnum = raw_input("Input how many random numbers you want to sort[Better less than 10000 :) ]: ")
@@ -77,3 +79,19 @@ endtime = (datetime.datetime.now().second, datetime.datetime.now().microsecond /
 print_using_time(starttime, endtime)
 print ""
 
+#Merge sort
+print "Now using merge sort..."
+starttime = (datetime.datetime.now().second, datetime.datetime.now().microsecond/ 1000)
+_ = mergeSort.merge_sort(l)
+print "Taking steps: " + str(mergeSort.merge_step)
+endtime = (datetime.datetime.now().second, datetime.datetime.now().microsecond / 1000)
+print_using_time(starttime, endtime)
+print ""
+
+#Radix sort
+print "Now using radix sort..."
+starttime = (datetime.datetime.now().second, datetime.datetime.now().microsecond/ 1000)
+print "Taking steps: " + str(radixSort.radix_sort(l)[1])
+endtime = (datetime.datetime.now().second, datetime.datetime.now().microsecond / 1000)
+print_using_time(starttime, endtime)
+print ""
